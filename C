@@ -1,0 +1,176 @@
+#include <stdio.h>
+#include "io.c"
+
+#define thresh1
+#define thresh2
+#define finding_delay 
+#define right_turn_delay
+
+obstacle avoidance and PID
+
+const int pwmrf, pwmlf, pwmrr,pwmlr;
+
+const int alignindexsmall, alignindexlarge,aligndelay;
+
+void align(){
+	if (centroid <= thresh1)
+	{
+		pwm(alignindexsmall,alignindexlarge);
+		delay(aligndelay);
+	}
+}
+
+void pwm(short speed_index1, short speed_index2)
+{
+	short ip = 0;
+	if (speed_index1 > 1023)
+	{  speed_index1 = 1023;}
+	if (speed_index2 > 1023)
+	{	speed_index2 = 1023;}
+	if (speed_index1 < -1023)
+	{  speed_index1 = -1023;}
+	if (speed_index2 < -1023)
+	{	speed_index2 = -1023;}  //truncates indices at 1023 and -1023
+	
+	if(speed_index1 >= 0){
+		pwmWrite(pwmrf, speed_index1);}
+	else{
+		ip = (-speed_index1);
+		pwmWrite(pwmrr, (-speed_index1));}
+		
+	if(speed_index2 >= 0){
+		pwmWrite(pwmlf, speed_index2);}
+	else{
+		ip = -speed_index2;
+		pwmWrite(pwmlr, (ip);}
+
+} //can probs be put in the actions part of the sm
+
+enum find_States{initial, notInFrame, right, left} fmstate;
+
+void findGoal()			//the if statement needs to be changed to centroid not in picture
+						//and then may be once it is in the frame the bot slowly aligns with it
+{
+	//switch(fmstate){}
+			if(centroid not in frame){cip = 0;}
+			while(cip == 0)
+			{
+				pwm();
+				delay();
+				find_object_2d;					//run like this or make it into a separate function?
+				if(centroid not in frame){cip = 0;}
+			}
+			if ((centroid<=thresh2)&&(centroid>=thresh1)){cit = 1;}
+				else{cit = 0;}
+			while(!cit)
+			{pwm(left_moving_indices)
+			sleep(finding_delay);
+			find_obj_2d;
+			if ((centroid<=thresh2)&&(centroid>=thresh1)){cit = 1;}
+			}
+			if ((centroid<=thresh2)&&(centroid>=thresh1)){cit = 1;} //also goes in the compute_centroid fn
+			
+			return 0;
+			}
+
+	
+enum Move_State {initi, movfwd, movright, movleft, correctionalfwd} state;
+
+unsigned int right_turn_counter = 0;  //counts the number of delays that bot turns right for
+									  //then the left turn would use a delay = counter*delay;
+void Move()
+{
+	switch(state)
+	{
+		case initi:
+		if ((centroid<=thresh2)&(centroid>=thresh1))
+		{			state = movfwd;			}
+		if (centroid>=thresh2)
+		{			state = movleft;		}		
+		if (centroid<=thresh1)
+		{			state = movright;		}
+		break;
+		
+		case movfwd:
+		if(!obstacle1 && !obstacle2 && !obstacle3 && so on...  )
+		{			state = movfwd;			}
+		else if(obstacles on the left or front-left of the machine)
+		{			state = movright;		}
+		break;
+		
+		case movright:
+		if(obstacles to the front of the machine)
+		{			state = movright;		}
+		if(!obstacles to the front of the machine)
+		{		state = correctionalfwd;	}
+		if()
+		break;
+		
+		case correctionalfwd:
+		if(!obstothefrontleft sides)
+		{	
+			//SM_find(i/p being the turns needed to get back on track)
+			movleft;
+		}
+		if(obstothesides)
+		{		state = correctionalfwd;	}
+		break;
+		
+		case movleft:
+		if(centroid > thresh1)
+		{			case movfwd;			}
+		if(centroid <= thresh1)
+		{			case = movfwd;			}	
+		break;
+	}
+	switch(state)
+	{
+		case movfwd:
+		right_turn_counter = 0;
+		if(object1)
+		pwm (0,0);
+		...and so on
+		break;
+		
+		case movright:						//Imma do the whole obs avoidance thing here, and it may interfere
+											        //with the inerrupts, should we choose to utilize them
+		do 
+		{   pwm(right turn indices);
+			delay(right_turn_delay);
+			right_turn_counter +=1;
+			pwm(0,0);
+			poll the US sensors;
+		} while (obstacles to the front of the machine);
+		
+		break;	
+		
+		case correcionalfwd:
+		
+		case movleft:
+		while(right_turn_counter >=0){
+		pwm(right turn indices in opposite order);
+		right_turn_delay -=1;}
+		
+	  }	
+		}
+	
+	
+	
+	
+int main(void)
+{
+	wiringPiSetupGpio();
+	unsigned char cti = 0;
+	
+	pinMode(pwmr, PWM_OUTPUT);
+	pinMode(pwml, PWM_OUTPUT);
+	
+	while(1)
+	{
+		find_obj_2d;
+		findGoal();
+		pool the sensors_HOW?;
+		Move();
+		
+	}
+}
