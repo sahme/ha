@@ -6,13 +6,12 @@
 #define finding_delay 
 #define right_turn_delay
 
-obstacle avoidance and PID
-
 const int pwmrf, pwmlf, pwmrr,pwmlr;
 
 const int alignindexsmall, alignindexlarge,aligndelay;
 
-void align(){
+void align()
+{
 	if (centroid <= thresh1)
 	{
 		pwm(alignindexsmall,alignindexlarge);
@@ -169,7 +168,7 @@ int main(void)
 	{
 		find_obj_2d;
 		findGoal();
-		pool the sensors_HOW?;
+		
 		Move();
 		
 	}
