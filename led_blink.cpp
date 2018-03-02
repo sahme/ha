@@ -19,6 +19,55 @@ const int alignindexsmall, alignindexlarge,aligndelay;		//make it so that the go
 															//thresholds should be so that a reasonable delay doesn't make a close
 															//goal go out of bounds			//includes and #defines
 
+
+
+
+unsigned char obs=0, obs1=0, obs2=0, obs3=0, obs4=0, obs5=0;
+unsigned char echo = 0;
+void poll(unsigned char i)
+{
+	echo = 0;
+	digitalWrite(uso[i],HIGH);
+	delayMicrosecondsHard(10);
+	digitalWrite(uso[i],LOW);
+	delayMicrosecondsHard(100);
+	echo = !(digitalRead(usi[i]));
+	if(echo){
+	switch (i)
+	{
+		case 1:
+		obs1 = 1;		break;
+		case 2:
+		obs2 =1;		break;
+		case 3:
+		obs3 =1;		break;
+		case 4:
+		obs4 =1;		break;
+		case 5:
+		obs5 =1;		break;
+	}
+	}
+	else{
+		case 1:
+		obs1 = 0;		break;
+		case 2:
+		obs2 =0;		break;
+		case 3:
+		obs3 =0;		break;
+		case 4:
+		obs4 =0;		break;
+		case 5:
+		obs5 =0;		break;
+	}
+	return;
+}
+
+
+
+
+
+
+
 //(char) 65 ==> Typecasting 65 to char
 
 void align(){
